@@ -38,8 +38,8 @@ function App() {
       }
       {!start && time !== 0 &&
         <div>
-          <Button onClick={() => setStart(true)} variant='dark'>Resume</Button>
-          <Button onClick={() => setTime(0)} variant='dark'>Reset</Button>
+          <Button className='btn' onClick={() => setStart(true)} variant='dark'>Resume</Button>
+          <Button className='btn' onClick={() => setTime(0)} variant='dark'>Reset</Button>
         </div>
       }
     </div>
