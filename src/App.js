@@ -1,26 +1,47 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css';
+import { Clock, Num } from './Styles/Styles'
+import { Button } from 'react-bootstrap'
 
 function App() {
 
-  const [hour, setHour] = useState(0)
-  const [min, setmin] = useState(0)
-  const [sec, setSec] = useState(0)
   const [start, setStart] = useState(false)
+  const [time, setTime] = useState(0)
 
-  const stopClock = () => {
-    
-  };
+  useEffect(() => {
+    let interval = null;
 
+    if(start){
+      interval = setInterval(() => {
+        setTime(prevTime => prevTime + 10)
+      }, 10)
+    }else{
+      clearInterval(interval)
+    }
+
+    return () => clearInterval(interval)
+  }, [start])
 
   return (
-    <div className="App">
-      <h1>{hour + ':' + min + sec}</h1>
-      {start?
-        <button onClick={stopClock}>Stop</button>:
-        <button>Start</button>
+    <div className='App'>
+      <h1>Stop Watch</h1>
+      <Clock>
+        <Num>{('0' + Math.floor((time / 60000) % 60)).slice(-2)}:</Num>
+        <Num>{('0' + Math.floor((time / 1000) % 60)).slice(-2)}:</Num>
+        <Num>{('0' + (time / 10) % 100).slice(-2)}</Num>
+      </Clock>
+      {!start && time === 0 &&
+        <Button onClick={() => setStart(true)} variant='dark'>Start</Button>
       }
-      <button>Reset</button>
+      {start && 
+        <Button onClick={() => setStart(false)} variant='dark'>Stop</Button>
+      }
+      {!start && time !== 0 &&
+        <div>
+          <Button onClick={() => setStart(true)} variant='dark'>Resume</Button>
+          <Button onClick={() => setTime(0)} variant='dark'>Reset</Button>
+        </div>
+      }
     </div>
   );
 }
